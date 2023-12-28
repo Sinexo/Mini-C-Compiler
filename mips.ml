@@ -27,11 +27,18 @@ type instr =
   | Addi  of reg * reg * int
   | Add   of reg * reg * reg
   | Mul   of reg * reg * reg
+  | Sub   of reg * reg * reg
+  | Div   of reg * reg * reg
   | Syscall
   | B     of label
+  | Beq   of reg * reg * label
+  | Bne   of reg * reg * label
   | Beqz  of reg * label
+  | Bgtu  of reg * int * label
+  | Blez  of reg * label
   | Jal   of label
   | Jr    of reg
+  | Xor   of reg * reg * reg
 
 type directive =
   | Asciiz of string
@@ -78,11 +85,18 @@ let fmt_instr = function
   | Addi (rd, rs, i) -> ps "  addi %s, %s, %d" (fmt_reg rd) (fmt_reg rs) i
   | Add (rd, rs, rt) -> ps "  add %s, %s, %s" (fmt_reg rd) (fmt_reg rs) (fmt_reg rt)
   | Mul (rd, rs, rt) -> ps "  mul %s, %s, %s" (fmt_reg rd) (fmt_reg rs) (fmt_reg rt)
+  | Sub (rd, rs, rt) -> ps "  sub %s, %s, %s" (fmt_reg rd) (fmt_reg rs) (fmt_reg rt)
+  | Div (rd, rs, rt) -> ps "  div %s, %s, %s" (fmt_reg rd) (fmt_reg rs) (fmt_reg rt)
   | Syscall          -> ps "  syscall"
   | B (l)            -> ps "  b %s" l
+  | Beq (rs,rt,l)    -> ps "  beq %s,%s,%s" (fmt_reg rs) (fmt_reg rt) l
+  | Bne (rs,rt,l)    -> ps "  bne %s,%s,%s" (fmt_reg rs) (fmt_reg rt) l
   | Beqz (r, l)      -> ps "  beqz %s, %s" (fmt_reg r) l
+  | Bgtu (r,i,l)     -> ps "  bgtu %s,%d,%s" (fmt_reg r) i l
+  | Blez (r,l)       -> ps "  blez %s,%s" (fmt_reg r) l
   | Jal (l)          -> ps "  jal %s" l
   | Jr (r)           -> ps "  jr %s" (fmt_reg r)
+  | Xor (rd,rs,ra)   -> ps "  xor %s,%s,%s" (fmt_reg rd) (fmt_reg rs) (fmt_reg ra)
 
 let fmt_dir = function
   | Asciiz (s) -> ps ".asciiz \"%s\"" s

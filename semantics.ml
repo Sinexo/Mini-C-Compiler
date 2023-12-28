@@ -12,3 +12,5 @@ let rec analyze_expr expr env =
 
 let analyze parsed =
   analyze_expr parsed Baselib._types_
+
+(* let rec analyze_instr instr env = *)
