@@ -4,9 +4,13 @@
 %}
 
 %token <int> Lint
-%token <string> Lvar
 %token <bool> Lbool
-%token Lend
+%token <string> Lvar
+%token Ladd Lsub Lmul Ldiv Lopar Lcpar
+%token Lreturn Lassign Lsc Lend
+
+%left Ladd Lsub
+%left Lmul Ldiv
 
 %start prog
 
@@ -27,5 +31,12 @@ expr:
 }
 | b = Lbool {
   Bool {value = b; pos = $startpos(b)}
+}
+
+|e = expr; Ladd; d = expr{
+	Call {func = "%add"; args=[e;d]; pos = $startpos}
+}
+|v =  Lvar {
+	Var {name = v; pos = $startpos}
 }
 ;

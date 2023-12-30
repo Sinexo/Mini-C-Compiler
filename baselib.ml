@@ -21,21 +21,25 @@ let builtins =
     Lw (T1, Mem (SP, 4));
     Add (V0, T0, T1);
     Jr RA;
+
     Label "_sub";
     Lw (T0, Mem (SP, 0));
     Lw (T1, Mem (SP, 4));
     Sub (V0, T0, T1);
     Jr RA;
+
     Label "_mul";
     Lw (T0, Mem (SP, 0));
     Lw (T1, Mem (SP, 4));
     Mul (V0, T0, T1);
     Jr RA;
+
     Label "_div";
     Lw (T0, Mem (SP, 0));
     Lw (T1, Mem (SP, 4));
     Div (V0, T0, T1);
     Jr RA;
+
     Label "_eq";
     Lw (T0, Mem (SP, 0));
     Lw (T1, Mem (SP, 4));
@@ -45,6 +49,7 @@ let builtins =
     Label "equal";
     Li (V0, 1);
     Jr RA;
+
     Label "_neq";
     Lw (T0, Mem (SP, 0));
     Lw (T1, Mem (SP, 4));
@@ -55,3 +60,4 @@ let builtins =
     Li (V0, 1);
     Jr RA;
   ]
+
