@@ -1,46 +1,88 @@
 open Ast.IR
 open Mips
 
-module Env = Map.Make(String)
+module Env = Map.Make (String)
 
-(* Define the cinfo structure with additional label counter *)
 type cinfo = {
-  code: Mips.instr list;
+  asm: Mips.instr list;
   env: Mips.loc Env.t;
   fpo: int;
-  counter: int;
-  return: string;
-  labelCounter: int; (* Added label counter *)
+  data_decls: Mips.decl list; (* Ajout pour gérer les déclarations de données *)
 }
 
-let string_count = ref 0
+let new_label =
+  let counter = ref 0 in
+  fun () ->
+    incr counter;
+    "str" ^ string_of_int !counter
 
-let newLabel prefix =
-  incr string_count;
-  Printf.sprintf "%s%d" prefix !string_count
+    let rec compile_expr e env info =
+      match e with
+      | Int n -> ([Li (V0, n)], info)
+      | Bool b -> ([Li (V0, if b then 1 else 0)], info)
+      | String s ->
+          let label = new_label () in
+          let formattedString = String.sub s 1 (String.length s - 2) in
+          let new_info = { info with data_decls = info.data_decls @ [(label, Mips.Asciiz formattedString)] } in
+          ([La (A0, Lbl label)], new_info)
+      | Call (f, args) ->
+          let new_asm, new_info =
+            List.fold_right
+              (fun a (acc_asm, acc_info) ->
+                let instrs, info = compile_expr a env acc_info in
+                (instrs @ [Addi (SP, SP, -4); Sw (V0, Mem (SP, 0))] @ acc_asm, info))
+              args ([], info)
+          in
+          (new_asm @ [Jal f; Addi (SP, SP, 4 * List.length args)], new_info)
+      | Void -> ([], info)
 
-let compileString s =
-    let label = newLabel "str" in
-    let formattedString = String.sub s 1 (String.length s - 2) in 
-    [ La (A0, Lbl label) ], (label, Asciiz formattedString)
+    let rec compile_instr instr info =
+      match instr with
+      | Decl v ->{
+            info with
+            fpo = info.fpo - 4;
+            env = Env.add v (Mem (FP, info.fpo)) info.env;
+          }
+      | Assign (v, e) ->
+          let compiled_expr, new_info = compile_expr e info.env info in{
+            new_info with
+            asm = new_info.asm @ compiled_expr @ [Sw (V0, Env.find v new_info.env)];  (* Modification ici *)
+          }
+      | Return e ->
+          let compiled_expr, new_info = compile_expr e info.env info in
+          { new_info with asm = new_info.asm @ compiled_expr @ [Move (SP, FP); Jr RA] }
+      | Print p ->
+            let new_info, compiled_prints = List.fold_right (fun e (acc_info, acc_asm) ->
+              let compiled_expr, new_info = compile_expr e acc_info.env acc_info in
+              (new_info, acc_asm @ compiled_expr @ match e with
+                | Int n -> [Li (A0, n); Li (V0, Syscall.print_int); Syscall]
+                | String _ -> [Li (V0, Syscall.print_str); Syscall]
+                | _ -> [])
+            ) p (info, [])
+            in
+            { new_info with asm = info.asm @ compiled_prints }
+        
+        
+        
 
-(* Updated compile_expr to handle strings with the new approach *)
-let rec compile_expr e env =
-  match e with
-  | Int n  -> [ Li (V0, n) ], []
-  | Bool b -> let value = if b then 1 else 0 in
-              [ Li (V0, value) ], []
-  | String s ->
-    let instrs, dataDecl = compileString s in
-    instrs, [dataDecl]
-  | Void    -> [ Li (V0, 0) ], []
+      
+      (* ... autres cas, comme Cond et Loop ... *)
+    
 
-(* Updated compile function to handle the new structure of compile_expr *)
+
+and compile_block block info =
+  match block with
+  | i :: b ->
+      let new_info = compile_instr i info in
+      compile_block b new_info
+  | [] -> info
+
 let compile ir =
-  let exprs, dataDecls = List.fold_left (fun (exprsAcc, dataAcc) expr ->
-    let instrs, dataDecl = compile_expr expr Env.empty in
-    (instrs @ exprsAcc, dataDecl @ dataAcc)
-  ) ([], []) [ir] in
-  { text =List.rev exprs ; data = List.rev dataDecls
-  }
-
+  let init_info = {
+    asm = Baselib.builtins;
+    env = Env.empty;
+    fpo = 0;
+    data_decls = [];
+  } in
+  let compiled = compile_block ir init_info in
+  { text = Move (FP, SP) :: Addi (FP, SP, compiled.fpo) :: compiled.asm; data = List.rev compiled.data_decls }

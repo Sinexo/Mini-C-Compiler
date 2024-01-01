@@ -1,0 +1,20 @@
+
+# Test for Calculations Between Two Variables
+
+# Test 1: Addition
+var a = 10;
+var b = 5;
+var result = a + b;
+assert(result == 15); # Check if result of a + b is 15
+
+# Test 2: Subtraction
+result = a - b;
+assert(result == 5); # Check if result of a - b is 5
+
+# Test 3: Multiplication
+result = a * b;
+assert(result == 50); # Check if result of a * b is 50
+
+# Test 4: Division
+result = a / b;
+assert(result == 2); # Check if result of a / b is 2

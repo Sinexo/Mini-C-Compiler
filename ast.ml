@@ -12,13 +12,20 @@ module Syntax = struct
              ; pos: Lexing.position }
     | Bool of { value: bool
              ; pos: Lexing.position }
+    (* | Var  of { name: ident
+             ; pos: Lexing.position } *)
+    | Call of { func: string ; args: expr list
+             ; pos: Lexing.position }
 
-  (* type instr=
+
+  type instr=
     | Decl   of {var: string; pos: Lexing.position }
     | Assign of {var: string; expr: expr; pos: Lexing.position}
-    | Return of { expr: expr; pos : Lexing.position}
-    | Cond of   { cond : expr; then_block : block; else_block: block; pos : Lexing.position}*)
+    | Return of {expr : expr; pos: Lexing.position}
+    | Print of {args : expr list; pos : Lexing.position}
+    (*| Cond of   { cond : expr; then_block : block; else_block: block; pos : Lexing.position}*)
 
+  and block = instr list
 end
 
 
@@ -28,4 +35,12 @@ module IR = struct
     | String of string
     | Bool of bool
     | Void
+    | Call of string * expr list
+
+  type instr =
+  | Decl of string
+  | Assign of string * expr
+  | Return of expr
+  | Print of expr list
+  and block = instr list
 end
