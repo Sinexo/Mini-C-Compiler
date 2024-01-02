@@ -1,0 +1,10 @@
+
+# Test for Variable Assignment
+
+# Test 1: Declaring and assigning a value to a variable
+var a = 10;
+assert(a == 10); # Check if 'a' is 10
+
+# Test 2: Reassigning a new value to the same variable
+a = 20;
+assert(a == 20); # Check if 'a' is now 20

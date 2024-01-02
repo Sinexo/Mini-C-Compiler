@@ -59,5 +59,6 @@ let builtins =
     Label "notequal";
     Li (V0, 1);
     Jr RA;
+
   ]
 

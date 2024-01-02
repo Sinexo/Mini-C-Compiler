@@ -13,18 +13,32 @@ rule token = parse
 | eof             { Lend }
 | [ ' ' '\t' ]    { token lexbuf }
 | '\n'            { Lexing.new_line lexbuf; token lexbuf }
-| "/"          	  { comment lexbuf }
-| '"'[^'"']*'"'   {Lvar (Lexing.lexeme lexbuf)}
+| "//"            { comment lexbuf }
+| '"'[^'"']*'"'   { Lstring (Lexing.lexeme lexbuf) }
 | "true"		  { Lbool true }
 | "false"		  { Lbool false }
 | ";"			  { Lsc }
+| ","             { Lvirgule }
+| "("			  { Lopen }
+| ")"			  { Lclose }
+| "{" 			  { Laccopen }
+| "}"			  { Laccclose }
 | "*"			  { Lmul }
+| "/"			  { Ldiv }
 | "="			  { Lassign }
 | "+"			  { Ladd }
-| ";"			  { Lend }
+| "=="			  {	Lequal }
+| "!="		  	  { Lnequal }
+| "if"			  { Lif }
+| "else"		  { Lelse }
+| "while"		  { Lwhile }
+| ";"			  { Lsc }
 | "return"		  { Lreturn }
+| "print"		  { Lprint }
+(* | "input"		  { Lscan } *)
 | num+ as n       { Lint (int_of_string n) }
-| alpha+ as v	  { Lvar v }
+(* | alpha+ as v	  { Lstring v } *)
+| identifier+ as id { Lvar (id) }
 | _ as c          { raise (Error c) }
 
 
