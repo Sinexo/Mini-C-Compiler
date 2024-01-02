@@ -3,6 +3,7 @@ Petit compilateur basique pour le langage C, réaliser en Ocaml pour le cours d'
 
 # Fonctionalités :
   - Types :Int,Bool, String.
+  - Commentaires
   - Assignation de variable typé.
   - Bloque d'instructions (if, then, else).
   - Boucle (while).
