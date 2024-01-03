@@ -12,7 +12,7 @@ Petit compilateur basique pour le langage C, réalisé en Ocaml pour le cours d'
 - **Structures de contrôle** : 
   - Blocs d'instructions (`if`, `else`).
   - Boucles (`while`).
-- **Affichage** : Impression de valeurs brutes et de variables (`print`).
+- **Affichage** : Impression de valeurs brutes et de variables (`print`) fonctionnant pour tout les type et avec un nombre dynamique de d'argument.
 
 ## Opérations
 - **Sur les entiers** :
