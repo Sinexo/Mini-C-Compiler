@@ -20,7 +20,7 @@ Petit compilateur basique pour le langage C, réalisé en Ocaml pour le cours d'
   - Soustraction (`-`)
   - Division (`/`,`%`)
   - Multiplication (`*`)
-  - Comparaison (`<`, `>`, `<=`, `>=`)
+  - Comparaison (`<`, `>`, `<=`, `>=`, `!=`, `!`)
 - **Sur les booléens** :
   - And (`&&`)
   - Or (`||`)
