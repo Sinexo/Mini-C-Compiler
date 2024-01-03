@@ -26,7 +26,7 @@ Petit compilateur basique pour le langage C, réalisé en Ocaml pour le cours d'
   - Xor
 
 ## Syntaxe
-La syntaxe du langage est similaire à celle du C. Voici quelques exemples typiques :
+La syntaxe du langage est similaire à celle du C. Voici quelques exemples typiques de cette syntaxe :
 
 ```c
 // Déclaration et assignation de variable
@@ -35,13 +35,20 @@ int a = 1;
 // Structure conditionnelle
 if (a == 1) {
   a = a + 1;
-}
+};
 
 // Boucle
 while (a == 1) {
   print("Boucle");
   a + 1;
+};
+
+if(a!=3){
+return a;
 }
+else{
+a = a + 1;
+};
 
 // Affichage et retour
 print(a);
