@@ -39,6 +39,7 @@ if (a == 1) {
 
 // Boucle
 while (a == 1) {
+  print("Boucle");
   a + 1;
 }
 
