@@ -1,5 +1,4 @@
 {
-  open Lexing
   open Parser
 
   exception Error of char
@@ -13,18 +12,43 @@ rule token = parse
 | eof             { Lend }
 | [ ' ' '\t' ]    { token lexbuf }
 | '\n'            { Lexing.new_line lexbuf; token lexbuf }
-| "/"          	  { comment lexbuf }
-| '"'[^'"']*'"'   {Lvar (Lexing.lexeme lexbuf)}
+| "//"            { comment lexbuf }
+| '"'[^'"']*'"'   { Lstring (Lexing.lexeme lexbuf) }
 | "true"		  { Lbool true }
 | "false"		  { Lbool false }
 | ";"			  { Lsc }
+| ","             { Lvirgule }
+| "("			  { Lopen }
+| ")"			  { Lclose }
+| "{" 			  { Laccopen }
+| "}"			  { Laccclose }
 | "*"			  { Lmul }
+| "/"			  { Ldiv }
+| "%"             {LdivE}
 | "="			  { Lassign }
 | "+"			  { Ladd }
-| ";"			  { Lend }
+| "<"			  { Llt }
+| ">"			  { Lgt }
+| "<="			  { Llte }
+| ">="			  { Lgte }
+| "=="			  {	Lequal }
+| "!="		  	  { Lnequal }
+| "!"			  { Lnot }
+| "&&"			  { Land }
+| "||"			  { Lor }
+| "if"			  { Lif }
+| "else"		  { Lelse }
+| "while"		  { Lwhile }
+| ";"			  { Lsc }
+| "func"		  { Lfunc }
 | "return"		  { Lreturn }
+| "print"		  { Lprint }
+(* | "%d"			{LdInt}
+| "%s"{LdString} *)
+| "scan"		  { Lscan }
 | num+ as n       { Lint (int_of_string n) }
-| alpha+ as v	  { Lvar v }
+(* | alpha+ as v	  { Lstring v } *)
+| identifier+ as id { Lvar (id) }
 | _ as c          { raise (Error c) }
 
 

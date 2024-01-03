@@ -1,7 +1,7 @@
 (* ocamlbuild -use-menhir test.byte *)
 
 open Lexing
-open Ast
+
 
 let err msg pos =
   Printf.eprintf "Error on line %d col %d: %s.\n"

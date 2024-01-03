@@ -1,0 +1,10 @@
+int a = 1;
+int b = 1;
+// j'essaie les commentaires
+while(a==1){
+	print(a);
+};
+
+print("feur");
+
+return 1;

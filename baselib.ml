@@ -59,5 +59,64 @@ let builtins =
     Label "notequal";
     Li (V0, 1);
     Jr RA;
+
+    Label "scanInt";
+    Lw (A0, Mem (SP, 0));
+    Li (V0, Syscall.read_int);
+    Syscall;
+    Jr RA;
+
+    Label "_scanString";
+    Lw (A0, Mem (SP, 0));
+    Li (V0, Syscall.read_str);
+    Syscall;
+    Jr RA;
+
+    Label "_or";
+    Or (V0, T0, T1);
+    Jr RA;
+
+    Label "_and";
+    And (V0, T0, T1);
+    Jr RA;
+
+    Label "_not";
+    Lw (T0, Mem (SP, 0));
+    Xori (V0, T0, 1);
+    Jr RA;
+
+    Label "_rem";
+    Lw (T0, Mem (SP, 0));
+    Lw (T1, Mem (SP, 4));
+    Div (V0, T0, T1);
+    Mfhi V0;
+    Jr RA;
+
+    Label "_lt";
+    Lw (T0, Mem (SP, 0));
+    Lw (T1, Mem (SP, 4));
+    Slt (V0, T0, T1);
+    Jr RA;
+
+    Label "_lte";
+    Lw (T0, Mem (SP, 0));
+    Lw (T1, Mem (SP, 4));
+    Slt (V0, T1, T0);
+    Seq (V0, Zero, V0);
+    Jr RA;
+
+    Label "_gt";
+    Lw (T0, Mem (SP, 0));
+    Lw (T1, Mem (SP, 4));
+    Slt (V0, T1, T0);
+    Jr RA;
+
+    Label "_gte";
+    Lw (T0, Mem (SP, 0));
+    Lw (T1, Mem (SP, 4));
+    Slt (V0, T0, T1);
+    Seq (V0, Zero, V0);
+    Jr RA;
+
   ]
 

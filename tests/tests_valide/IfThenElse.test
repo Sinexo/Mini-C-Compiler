@@ -1,0 +1,12 @@
+int a = 1;
+int b = 10;
+int c = 0;
+if (a == 1) {
+  c = b * 2;
+  b = b + 1;
+}
+else{
+	print(a);
+};
+print(c);
+return 1;

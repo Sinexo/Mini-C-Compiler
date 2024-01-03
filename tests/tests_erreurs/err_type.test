@@ -1,0 +1,2 @@
+int a = "error";
+return 1;
