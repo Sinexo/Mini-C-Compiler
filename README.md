@@ -2,6 +2,8 @@
 
 # Mini-C-Compiler
 
+# Auteur : Pereira Oliveira Tomas, L3-B, 21001378.
+
 ## Description
 Petit compilateur basique pour le langage C, réalisé en Ocaml pour le cours d'interprétation et de compilation de la licence informatique de l'Université Paris 8.
 
@@ -12,7 +14,7 @@ Petit compilateur basique pour le langage C, réalisé en Ocaml pour le cours d'
 - **Structures de contrôle** : 
   - Blocs d'instructions (`if`, `else`).
   - Boucles (`while`).
-- **Affichage** : Impression de valeurs brutes et de variables (`print`) fonctionnant pour tout les type et avec un nombre dynamique de d'argument.
+- **Affichage** : Impression de valeurs brutes et de variables (`print`) fonctionnant pour tout les type et avec un nombre dynamique d'argument.
 
 ## Opérations
 - **Sur les entiers** :
