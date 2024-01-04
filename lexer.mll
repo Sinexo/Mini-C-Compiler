@@ -40,7 +40,7 @@ rule token = parse
 | "else"		  { Lelse }
 | "while"		  { Lwhile }
 | ";"			  { Lsc }
-(* | "func"		  { Lfunc } *)
+| "func"		  { Lfunc }
 | "return"		  { Lreturn }
 | "print"		  { Lprint }
 (* | "%d"			{LdInt} *)
