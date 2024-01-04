@@ -15,7 +15,7 @@ Petit compilateur basique pour le langage C, réalisé en Ocaml pour le cours d'
   - Blocs d'instructions (`if`, `else`).
   - Boucles (`while`).
 - **Affichage** : Impression de valeurs brutes et de variables (`print`) fonctionnant pour tout les type et avec un nombre dynamique d'argument.
-
+- **Appel de fonction**
 ## Opérations
 - **Sur les entiers** :
   - Addition (`+`)
