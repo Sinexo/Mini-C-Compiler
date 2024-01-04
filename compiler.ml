@@ -98,9 +98,16 @@ let new_label =
                 info_loop with asm = info_loop.asm @ [B loop_label; Label end_label];
               } in
                 {info_loop2 with asm = info.asm @ [Label loop_label]}
-
-
-
+      | Func (_, args, block) ->
+          let func_label = new_label () in
+          let args_space = 4 * List.length args in
+          let info_func =
+            compile_block block { info with env = Env.empty; fpo = args_space }
+            in{ info with asm = info.asm @ [ Label func_label ]
+                                @ [ Sw (RA, Mem (SP, -4)); Sw (FP, Mem (SP, -8)); Move (FP, SP); Addi (SP, SP, -8) ]
+                                @ [ Addi (SP, SP, -args_space) ]
+                                @ info_func.asm
+                                @ [ Addi (SP, SP, args_space); Jr RA ]}
 
 and compile_block block info =
   match block with
