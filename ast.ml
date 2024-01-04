@@ -25,8 +25,8 @@ module Syntax = struct
     | Cond   of {cond : expr; then_block : block; else_block: block; pos : Lexing.position}
     | Loop   of {cond : expr; block: block; pos : Lexing.position}
     (* | Scan   of {var  : string; pos : Lexing.position} *)
-    (* | Func   of instr list *)
-
+    | Func   of { name : ident ; args : ident list ; block : block ; pos : Lexing.position}
+  
   and block = instr list
   and block_def = def list
 end
@@ -48,7 +48,7 @@ module IR = struct
   | Cond   of expr * block * block
   | Loop   of expr * block
   (* | Scan   of string *)
-  (* | Func   of string * expr list *)
+  | Func   of ident * ident list * block
 
   and block = instr list
 end
