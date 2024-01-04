@@ -36,6 +36,20 @@ prog:
 |i = instr; Lsc; Lend {i}
 ;
 
+param_list:
+  | Lvar; id = Lident { [id] }
+  | Lvar; id = Lident; Lvirgule; rest = param_list { id :: rest }
+  | id = Lident { [id] }
+  | id = Lident; Lvirgule; rest = param_list { id :: rest }
+  | LopenP; params = param_list; LcloseP { params }
+  | LopenP; params = param_list; Lvirgule; LcloseP { params }
+
+
+func_decl:
+  | Lfunc id = Lident LopenP params = param_list LcloseP LopenC body = block LcloseC
+  { [ Func { name = id; args = params; block = body; pos = $startpos($1) } ] }
+;
+
 
 instr:
 | Lvar; id = Lvar { [ Decl { var = id; pos = $startpos(id) } ] }
@@ -60,6 +74,9 @@ instr:
 // | Lscan; Lopen ; id = Lvar; Lvirgule ; LdString ; Lclose{
 // 	[ Call { func = "_scanString"; args = [e; d]; pos = $startpos($2) } ]
 // }
+
+//| Lscan LopenP s = expr LcloseP A teste celui la avec la syntaxe de call différente
+//  { Call {func = "_scanf"; args = [s]; pos = $startpos(s) } }
 
 | Lreturn; e = expr {
 	[Return { expr = e;pos = $startpos($1)}]
