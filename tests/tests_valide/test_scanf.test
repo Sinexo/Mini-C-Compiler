@@ -1,0 +1,4 @@
+int a = 0;
+scan(a,%d);
+print(a);
+return 1;

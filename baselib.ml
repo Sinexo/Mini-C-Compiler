@@ -11,8 +11,19 @@ let _types_ = Env.of_seq(
     ("%div", Func_t(Int_t,[Int_t;Int_t]));
     ("%eq", Func_t(Bool_t,[Int_t;Int_t]));
     ("%neq", Func_t(Bool_t,[Int_t;Int_t]));
+    ("%or", Func_t(Bool_t,[Bool_t;Bool_t]));
+    ("%and", Func_t(Bool_t,[Bool_t;Bool_t]));
+    ("%not", Func_t(Bool_t,[Bool_t]));
+    ("%rem", Func_t(Int_t,[Int_t;Int_t]));
+    ("%lt", Func_t(Bool_t,[Int_t;Int_t]));
+    ("%lte", Func_t(Bool_t,[Int_t;Int_t]));
+    ("%gt", Func_t(Bool_t,[Int_t;Int_t]));
+    ("%gte", Func_t(Bool_t,[Int_t;Int_t]));
+    ("%scanInt", Func_t(Int_t,[]));
+    ("%scanString", Func_t(String_t,[]))
   ]
 )
+
 
 let builtins =
   [
@@ -59,5 +70,64 @@ let builtins =
     Label "notequal";
     Li (V0, 1);
     Jr RA;
+
+    Label "_scanInt";
+    Lw (A0, Mem (SP, 0));
+    Li (V0, Syscall.read_int);
+    Syscall;
+    Jr RA;
+
+    Label "_scanString";
+    Lw (A0, Mem (SP, 0));
+    Li (V0, Syscall.read_str);
+    Syscall;
+    Jr RA;
+
+    Label "_or";
+    Or (V0, T0, T1);
+    Jr RA;
+
+    Label "_and";
+    And (V0, T0, T1);
+    Jr RA;
+
+    Label "_not";
+    Lw (T0, Mem (SP, 0));
+    Xori (V0, T0, 1);
+    Jr RA;
+
+    Label "_rem";
+    Lw (T0, Mem (SP, 0));
+    Lw (T1, Mem (SP, 4));
+    Div (V0, T0, T1);
+    Mfhi V0;
+    Jr RA;
+
+    Label "_lt";
+    Lw (T0, Mem (SP, 0));
+    Lw (T1, Mem (SP, 4));
+    Slt (V0, T0, T1);
+    Jr RA;
+
+    Label "_lte";
+    Lw (T0, Mem (SP, 0));
+    Lw (T1, Mem (SP, 4));
+    Slt (V0, T1, T0);
+    Seq (V0, Zero, V0);
+    Jr RA;
+
+    Label "_gt";
+    Lw (T0, Mem (SP, 0));
+    Lw (T1, Mem (SP, 4));
+    Slt (V0, T1, T0);
+    Jr RA;
+
+    Label "_gte";
+    Lw (T0, Mem (SP, 0));
+    Lw (T1, Mem (SP, 4));
+    Slt (V0, T0, T1);
+    Seq (V0, Zero, V0);
+    Jr RA;
+
   ]
 

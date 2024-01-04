@@ -1,0 +1,13 @@
+// test : assignation de variable, utilisation de variable,loop,conditions,affichage,entrée, return//
+b = true;
+while(b==true){
+	print("Aimez vous Ocaml ?\n");
+	a = scan(string);
+	if (a == oui || a == Oui) {
+		print("Vous mentez\n");
+	}
+	else{
+		b == false;
+	}
+}
+return 1;

@@ -1,0 +1,5 @@
+string a = "feur";
+string b = 1;
+print("test1");
+print("test2");
+return 1;
